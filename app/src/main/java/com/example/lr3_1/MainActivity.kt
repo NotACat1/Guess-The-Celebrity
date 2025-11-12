@@ -3,40 +3,46 @@ package com.example.lr3_1
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.lifecycle.lifecycleScope
-import com.example.lr3_1.model.Celebrity
-import com.example.lr3_1.network.CelebrityRepository
-import com.example.lr3_1.ui.screens.CelebrityGameScreen
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
+import com.example.lr3_1.ui.game.GameScreen
 import com.example.lr3_1.ui.theme.AppTheme
-import kotlinx.coroutines.launch
+import dagger.hilt.android.AndroidEntryPoint
+import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 
 /**
- * Главная Activity приложения.
+ * Класс приложения, инициализирующий Dagger Hilt.
  *
- * Отвечает за:
- * - загрузку списка знаменитостей;
- * - инициализацию UI с помощью Jetpack Compose;
- * - передачу данных в экран [CelebrityGameScreen].
+ * Аннотируется [HiltAndroidApp], чтобы включить автоматическую
+ * генерацию графа зависимостей.
  */
+@HiltAndroidApp
+class MyApplication : Application()
+
+/**
+ * Главная активность приложения.
+ *
+ * Отображает экран [GameScreen] внутри Compose UI
+ * с применением [AppTheme] и Material 3.
+ */
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    /**
+     * Инициализирует Compose UI при создании активности.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Локальный список знаменитостей (загружается асинхронно)
-        var celebrities: List<Celebrity> = emptyList()
-
-        // Загружаем данные в фоновом потоке
-        lifecycleScope.launch {
-            celebrities = CelebrityRepository.loadCelebrities()
-
-            // После загрузки — строим UI
-            setContent {
-                AppTheme {
-                    CelebrityGameScreen(
-                        celebrities = celebrities,
-                        onNextCelebrity = {}
-                    )
+        setContent {
+            AppTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    GameScreen()
                 }
             }
         }
