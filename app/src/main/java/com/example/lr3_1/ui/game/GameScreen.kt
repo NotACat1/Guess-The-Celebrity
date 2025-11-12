@@ -28,6 +28,11 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 
+/**
+ * Основной экран игры "Угадай знаменитость".
+ *
+ * @param viewModel ViewModel, управляющий состоянием UI для игрового процесса.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameScreen(
@@ -87,6 +92,14 @@ fun GameScreen(
     }
 }
 
+/**
+ * Контент игрового экрана.
+ *
+ * @param state Состояние UI текущей игры.
+ * @param onInputChanged Лямбда для обработки изменения текста ввода пользователя.
+ * @param onGuess Лямбда для обработки попытки угадать знаменитость.
+ * @param onGiveUp Лямбда для обработки действия "Сдаться".
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun GameContent(
@@ -107,7 +120,7 @@ private fun GameContent(
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
 
-        // ScoreCard
+        // Карточка с текущим уровнем и очками
         ElevatedCard(
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier.fillMaxWidth(),
@@ -126,7 +139,7 @@ private fun GameContent(
             }
         }
 
-        // Image Section
+        // Секция с изображением знаменитости
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -146,7 +159,7 @@ private fun GameContent(
             )
         }
 
-        // Input Section
+        // Поле ввода имени знаменитости
         OutlinedTextField(
             value = state.userInput,
             onValueChange = {
@@ -165,6 +178,7 @@ private fun GameContent(
             }
         )
 
+        // Дропдаун с подсказками
         AnimatedVisibility(visible = isDropdownExpanded && state.suggestions.isNotEmpty()) {
             Card(
                 modifier = Modifier
@@ -192,7 +206,7 @@ private fun GameContent(
             }
         }
 
-        // Result feedback
+        // Отображение результата угадывания
         Crossfade(targetState = state.guessResult) { result ->
             when (result) {
                 GuessResult.CORRECT -> ResultChip("✅ Correct!", MaterialTheme.colorScheme.primary)
@@ -201,7 +215,7 @@ private fun GameContent(
             }
         }
 
-        // Give up button
+        // Кнопка "Сдаться"
         Button(
             onClick = onGiveUp,
             enabled = !state.showAnswer,
@@ -213,6 +227,7 @@ private fun GameContent(
             Text("Give Up 😅", style = MaterialTheme.typography.titleMedium)
         }
 
+        // Отображение правильного ответа
         AnimatedVisibility(visible = state.showAnswer) {
             Text(
                 text = "The correct answer: ${state.currentCelebrity?.name}",
@@ -223,6 +238,12 @@ private fun GameContent(
     }
 }
 
+/**
+ * Чип для отображения результата угадывания.
+ *
+ * @param text Текст результата.
+ * @param color Цвет, ассоциированный с результатом.
+ */
 @Composable
 fun ResultChip(text: String, color: Color) {
     Surface(
@@ -241,6 +262,13 @@ fun ResultChip(text: String, color: Color) {
     }
 }
 
+/**
+ * Компонент для отображения состояния ошибки с возможностью повторной загрузки.
+ *
+ * @param message Сообщение об ошибке.
+ * @param onRetry Лямбда для повторной попытки загрузки.
+ * @param modifier Модификатор для кастомизации внешнего вида компонента.
+ */
 @Composable
 private fun ErrorState(
     message: String,
