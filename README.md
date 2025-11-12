@@ -21,8 +21,9 @@
 
 ## 🖼️ Скриншот (пример UI)
 
+
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/85136a54-b627-4e3e-ab13-b2d76c5b287d" width="380" alt="Game Screenshot" />
+  <img src="https://github.com/user-attachments/assets/7992df7e-3495-4597-82e1-87792f802789" width="380" alt="Game Screenshot" />
 </p>
 
 ---
